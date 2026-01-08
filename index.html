@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eric Palomares - Desarrollador de Videojuegos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #8a2be2;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8a2be2, #00f5ff);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 6rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(135deg, #8a2be2, #00f5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            animation: fadeInUp 1s;
+            font-weight: 900;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            color: #b8b8b8;
+            margin: 0;
+            animation: fadeInUp 1s 0.2s backwards;
+            font-weight: 400;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0;
+            line-height: 1.8;
+            animation: fadeInUp 1s 0.4s backwards;
+            color: #a0a0a0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #8a2be2, #00f5ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            animation: fadeInUp 1s 0.6s backwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .content-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #8a2be2, #00f5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #8a2be2;
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-content h3 {
+            color: #00f5ff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .project-content p {
+            color: #b8b8b8;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            padding: 0.4rem 1rem;
+            background: rgba(138, 43, 226, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #00f5ff;
+            border: 1px solid rgba(138, 43, 226, 0.4);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(25, 25, 35, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #8a2be2;
+        }
+
+        .skill-category h3 {
+            color: #00f5ff;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(138, 43, 226, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #8a2be2, #00f5ff);
+            border-radius: 10px;
+            transition: width 1s;
+        }
+
+        .cv-section {
+            text-align: center;
+        }
+
+        .cv-viewer {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .cv-viewer img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .contact-content {
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 1.5rem;
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 15px;
+            text-decoration: none;
+            color: #e0e0e0;
+            transition: all 0.3s;
+            min-width: 200px;
+            border: 2px solid transparent;
+        }
+
+        .contact-link:hover {
+            border-color: #8a2be2;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+        }
+
+        .contact-link span {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+            nav ul {
+                gap: 1rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="bg-animation" id="bgCanvas"></canvas>
+    
+    <nav>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#proyectos">Proyectos</a></li>
+            <li><a href="#habilidades">Habilidades</a></li>
+            <li><a href="#cv">CV</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <section id="inicio" class="hero">
+        <h1>Soy Eric Palomares Rodriguez</h1>
+        <h2>Programador y Desarrollador de Videojuegos</h2>
+        <p>Soy Eric Palomares Rodriguez, un desarrollador de videojuegos amante de los videojuegos, tanto en jugarlos como en crearlos. Para mi los videojuegos son muy importantes, por eso tengo una gran pasión para crear y mejorar videojuegos a lo largo de mi carrera profesional.</p>
+        <a href="#proyectos" class="cta-button">Ver Mis Proyectos</a>
+    </section>
+
+    <section id="proyectos">
+        <div class="content-container">
+            <h2 class="section-title">Proyectos Destacados</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/errico6/Portfolio-images/refs/heads/main/Captura%20de%20pantalla%202026-01-07%20110627.png" alt="Warhammer 40k The Last Marine">
+                    </div>
+                    <div class="project-content">
+                        <h3>Warhammer 40k The Last Marine</h3>
+                        <p>El Proyecto más grande de Universidad en el que he participado, un hack and slash inspirado en el universo de Warhammer 40k.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Coffee Engine</span>
+                            <span class="tech-tag">Lua</span>
+                            <span class="tech-tag">GitHub</span>
+                        </div>
+                        <a href="https://burned-games.github.io" target="_blank" class="cta-button" style="margin-top: 1rem; padding: 0.7rem 1.5rem; font-size: 0.9rem;">Ver Proyecto</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/errico6/Portfolio-images/refs/heads/main/Captura%20de%20pantalla%202026-01-07%20111343.png" alt="The Rituals of Bill El Tuerto">
+                    </div>
+                    <div class="project-content">
+                        <h3>The Rituals of Bill El Tuerto</h3>
+                        <p>Escape Room montado de misterio para jugarlo en Realidad Virtual.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Unity</span>
+                            <span class="tech-tag">OpenXR</span>
+                            <span class="tech-tag">XR Toolkit</span>
+                            <span class="tech-tag">C#</span>
+                            <span class="tech-tag">GitHub</span>
+                        </div>
+                        <a href="https://github.com/GoForce-Games/The-Rituals-of-Bill-El-Tuerto" target="_blank" class="cta-button" style="margin-top: 1rem; padding: 0.7rem 1.5rem; font-size: 0.9rem;">Ver Proyecto</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/errico6/Portfolio-images/refs/heads/main/Captura%20de%20pantalla%202026-01-07%20114119.png" alt="A personal Arkanoid">
+                    </div>
+                    <div class="project-content">
+                        <h3>A personal Arkanoid</h3>
+                        <p>Un juego similar al Arkanoid antiguo creado como reto personal en poco tiempo.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Unity</span>
+                            <span class="tech-tag">C#</span>
+                            <span class="tech-tag">GitHub</span>
+                        </div>
+                        <a href="https://github.com/errico6/Arkanoid/tree/main" target="_blank" class="cta-button" style="margin-top: 1rem; padding: 0.7rem 1.5rem; font-size: 0.9rem;">Ver Proyecto</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/errico6/Portfolio-images/refs/heads/main/Captura%20de%20pantalla%202026-01-07%20115139.png" alt="Bomberman Panic Bomber">
+                    </div>
+                    <div class="project-content">
+                        <h3>Bomberman Panic Bomber NeoGeo Adaptation</h3>
+                        <p>Mi primer trabajo de universidad, la creación de un Panic Bomber como el antiguo.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">GitHub</span>
+                        </div>
+                        <a href="https://github.com/GoForce-Games/Bomberman-Panic-Bomber-NeoGeo_Adaptation" target="_blank" class="cta-button" style="margin-top: 1rem; padding: 0.7rem 1.5rem; font-size: 0.9rem;">Ver Proyecto</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="habilidades">
+        <div class="content-container">
+            <h2 class="section-title">Habilidades Técnicas</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Motores de Juego</h3>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Unity</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Lenguajes</h3>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>C#</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>C++</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Python</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Lua</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Herramientas</h3>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>GitHub</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Maya</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>ZBrush</span>
+                            <span>82%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 82%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Photoshop</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Especialidades</h3>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Programación</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Game Design</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Modelado 3D</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 88%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cv">
+        <div class="content-container cv-section">
+            <h2 class="section-title">Curriculum Vitae</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #b8b8b8;">Mi experiencia y formación académica</p>
+            <div class="cv-viewer">
+                <img src="https://raw.githubusercontent.com/errico6/Portfolio-images/refs/heads/main/Captura%20de%20pantalla%202026-01-07%20115948.png" alt="CV Eric Palomares Rodriguez" style="width: 100%; height: auto; display: block;">
+            </div>
+            <a href="https://drive.google.com/uc?export=download&id=1CI_CEuNWZ0qBfs9T-lwo_5ZUiC8mG_59" download="CV_Eric_Palomares.pdf" class="cta-button">📥 Descargar CV</a>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="content-container contact-content">
+            <h2 class="section-title">Conectemos</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">¿Tienes un proyecto en mente? ¡Hablemos!</p>
+            <div class="contact-links">
+                <a href="mailto:eric.palomares.work@gmail.com" class="contact-link">
+                    <span>📧</span>
+                    <strong>Email</strong>
+                    <p>eric.palomares.work@gmail.com</p>
+                </a>
+                <a href="tel:+34622708282" class="contact-link">
+                    <span>📱</span>
+                    <strong>Teléfono</strong>
+                    <p>622 70 82 82</p>
+                </a>
+                <a href="https://github.com/ericpalomareswork" class="contact-link" target="_blank">
+                    <span>💻</span>
+                    <strong>GitHub</strong>
+                    <p>github.com/ericpalomareswork</p>
+                </a>
+                <a href="https://www.linkedin.com/in/eric-palomares-rodriguez-8194a4389/" class="contact-link" target="_blank">
+                    <span>💼</span>
+                    <strong>LinkedIn</strong>
+                    <p>Eric Palomares Rodriguez</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = '#8a2be2';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(138, 43, 226, ${1 - distance / 100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
